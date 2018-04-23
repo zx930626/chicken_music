@@ -2,7 +2,12 @@
     <div class="recommend">
         <scroll>
             <div class="slider">
-                <slider :sliderImg="imgList">
+                <slider>
+                    <div v-for="(item,key) in imgList" :key="key">
+                        <a :href="item.linkUrl">
+                            <img :src="item.picUrl" alt="">
+                        </a>
+                    </div>
                 </slider>
             </div>
         </scroll>

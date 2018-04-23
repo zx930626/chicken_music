@@ -1,14 +1,10 @@
 <template>
     <div class="slider" ref="slider">
         <div class="slider_imgs" ref="sliderImg">
-            <div v-for="(item,key) in sliderImg" :key="key">
-                <a :href="item.linkUrl">
-                    <img :src="item.picUrl" alt="">
-                </a>
-            </div>
+            <slot></slot>
         </div>
         <div class="points">
-            <span class="dot" v-for="(item,index) in dots" :key='index'>
+            <span class="dot" :class="{current:currentPageIndex == index}" v-for="(item,index) in dots" :key='index'>
             </span>
         </div>
     </div>
@@ -24,20 +20,23 @@
             }
         },
         props:{
-            sliderImg:{
-                type:Array,
-                default:[],
-            },
             loop:{
                 type:Boolean,
                 default:true
+            },
+            autoPlay:{
+                type:Boolean,
+                default:true,
             }
         },
         mounted(){
             setTimeout(()=>{
                 this._setWidth()
+                this._initDots()
                 this._initScroll()
-                this._play()
+                if (this.autoPlay) {
+                    this._play()
+                }
             },120)
 
             window.addEventListener('resize',() => {
@@ -65,19 +64,20 @@
                     scrollX:true,
                     scrollY:false,
                     momentum:false,
-                    snap: true,
-                    snapLoop: this.loop,
-                    snapThreshold: 0.3,
-                    snapSpeed: 400,
+                    snap:{
+                        loop: this.loop,
+                        threshold: 0.3,
+                        speed: 400,
+                    }
                 })
 
                 this.slider.on('scrollEnd',() => {
                     let index = this.slider.getCurrentPage().pageX
-                    if (this.loop) {
-                        index -= 1
+                    this.currentPageIndex = index
+                    if (this.autoPlay) {
+                        clearTimeout(this.timer)
+                        this._play()
                     }
-                    this.currentPageIndex = index + 1
-                    this._play()
                 })
                 this.slider.on('beforeScrollStart',() => {
                     clearTimeout(this.timer)
@@ -100,6 +100,7 @@
     .slider{
         width:100%;
         overflow: hidden;
+        position: relative;
     }
     .slider_imgs{
         width:100%;
@@ -108,5 +109,27 @@
     }
     .slider_item{
         float: left;
+    }
+    .points{
+        position: absolute;
+        bottom:10px;
+        display: flex;
+        justify-content: space-between;
+        width: 100px;
+        overflow: hidden;
+        left:50%;
+        margin-left: -50px;
+    }
+    .dot{
+        width: 10px;
+        height:10px;
+        display: inline-block;
+        background: #666666;
+        border-radius: 50%;
+    }
+    .current{
+        width: 18px;
+        border-radius: 10px;
+        background: rgb(190, 190, 190);
     }
 </style>
