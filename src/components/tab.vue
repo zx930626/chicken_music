@@ -26,9 +26,15 @@ export default {
         justify-content: space-around;
         align-items: center;
         line-height: 30px;
+        margin-bottom: 5px;
     }
     .tab a{
         color: white;
         cursor: pointer;
+        font-size: 14px;
+    }
+    a.router-link-active{
+        border-bottom:2px solid #fff000;
+        color: #fff000;
     }
 </style>

@@ -37,4 +37,8 @@
         background: #4a4a4a;
         color: white;
     }
+    #app{
+        width: 100%;
+        height:100%;
+    }
 </style>

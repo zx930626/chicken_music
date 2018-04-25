@@ -1,7 +1,11 @@
 <template>
     <div class="slider" ref="slider">
         <div class="slider_imgs" ref="sliderImg">
-            <slot></slot>
+            <div v-for="(item,key) in imgList" :key="key" class="slider_item">
+                <a :href="item.linkUrl">
+                    <img :src="item.picUrl" alt="">
+                </a>
+            </div>
         </div>
         <div class="points">
             <span class="dot" :class="{current:currentPageIndex == index}" v-for="(item,index) in dots" :key='index'>
@@ -11,12 +15,15 @@
 </template>
 <script>
     import BScroll from 'better-scroll'
+    import {getRecommend} from 'api/recommend'
+    import {ERR_OK} from 'api/config'
 
     export default {
         data() {
             return {
                 dots:[],
                 currentPageIndex:0,
+                imgList:[],
             }
         },
         props:{
@@ -29,50 +36,59 @@
                 default:true,
             }
         },
+        created(){
+            this._getRecommend()
+        },
         mounted(){
-            setTimeout(()=>{
-                this._setWidth()
-                this._initDots()
-                this._initScroll()
-                if (this.autoPlay) {
-                    this._play()
-                }
-            },120)
-
             window.addEventListener('resize',() => {
                 this._setWidth()
                 this.slider.refresh()
             })
         },
         methods:{
+            _getRecommend() {
+                getRecommend().then((res) => {
+                    if(res.code == ERR_OK) {
+                        this.imgList = res.data.slider
+                        setTimeout(() => {
+                            this._setWidth()
+                            this._initDots()
+                            this._initScroll()
+                            if (this.autoPlay) {
+                                this._play()
+                            }
+                        })
+                    }
+                })
+            },
             _setWidth() {
-                let dom = this.$refs.sliderImg.children
                 let width = this.$refs.slider.clientWidth
-                for (let i = 0;i < dom.length;i++) {
-                    dom[i].style.width = width + 'px'
-                    dom[i].className = 'slider_item'
-                }
-                
-                this.$refs.sliderImg.style.width = this.loop ? width * (dom.length + 2) + 'px' : width * dom.length + 'px'
-                
+                this.width = `width:${width}px`
+                let dom = this.$refs.sliderImg.children
+                Array.prototype.forEach.call(dom,(item) => {
+                    item.style.width = `${width}px`
+                })
+                this.$refs.sliderImg.style.width = this.loop ? width * (this.imgList.length + 2) + 'px' : width * this.imgList.length + 'px'
             },
             _initDots() {
-                this.dots = new Array(this.$refs.sliderImg.children.length)
+                this.dots = new Array(this.imgList.length)
             },
             _initScroll() {
                 this.slider = new BScroll(this.$refs.slider,{
                     scrollX:true,
                     scrollY:false,
                     momentum:false,
-                    snap:{
-                        loop: this.loop,
-                        threshold: 0.3,
-                        speed: 400,
-                    }
+                    snap:true,
+                    snapLoop: this.loop,
+                    snapThreshold: 0.3,
+                    snapSpeed: 400,
+                    
                 })
-
                 this.slider.on('scrollEnd',() => {
                     let index = this.slider.getCurrentPage().pageX
+                    if (this.loop) {
+                        index -= 1
+                    }
                     this.currentPageIndex = index
                     if (this.autoPlay) {
                         clearTimeout(this.timer)
@@ -84,14 +100,13 @@
                 })
             },
             _play() {
-                let index = this.currentPageIndex
+                let index = this.currentPageIndex + 1
                 if (this.loop) {
                     index++
                 }
                 this.timer = setTimeout(() => {
-                    console.log(index)
                     this.slider.goToPage(index,0,400)
-                },1000)
+                },3000)
             }
         },
     }
