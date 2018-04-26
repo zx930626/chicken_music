@@ -142,7 +142,7 @@
         background: #666666;
         border-radius: 50%;
     }
-    .current{
+    .points.current{
         width: 18px;
         border-radius: 10px;
         background: rgb(190, 190, 190);

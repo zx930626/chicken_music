@@ -1,6 +1,6 @@
 <template>
     <div class="recommend">
-        <scroll :data="recommend_list">
+        <scroll :data="recommend_list" ref="scroll" class="rec_list_view">
             <div>
                 <div class="slider">
                     <slider>
@@ -79,6 +79,9 @@ export default {
         overflow: scroll;
         height:calc(100% - 77px)
     }
+    .rec_list_view{
+        height:100%;
+    }
     .slider{
         width: 100%;
     }
@@ -106,13 +109,13 @@ export default {
         align-items: flex-start; 
         margin-left:20px;
     }
-    li span{
+    .recommend li span{
         text-align: left;
         color: white;
         line-height: 20px;
         font-size: 13px;
     }
-    li span:last-child{
+    .recommend li span:last-child{
         color: #a7a7a7;
     }
 </style>
