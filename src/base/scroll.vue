@@ -38,6 +38,11 @@ export default {
             default:20,
         }
     },
+    mounted() {
+        // setTimeout(() => {
+        //     this._initScroll()
+        // },this.refreshDelay)
+    },
     methods:{
         _initScroll() {
             if (!this.$refs.wrapper) {

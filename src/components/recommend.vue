@@ -10,7 +10,7 @@
                     <h5>热门歌单推荐</h5>
                     <div class="list">
                         <ul>
-                            <li v-for="(item,index) in recommend_list" :key='index'>
+                            <li class="rec_Li" @click="selectItem(item)" v-for="(item,index) in recommend_list" :key='index'>
                                 <div class="icon">
                                     <img :src="item.imgurl" alt="">
                                 </div>
@@ -25,13 +25,17 @@
                 </div>
             </div>
         </scroll>
+        <router-view></router-view>
     </div>
 </template>
 <script>
 import Scroll from '../base/scroll'
 import Slider from 'base/slider'
-import {getDiscList} from 'api/recommend'
+import {getDiscList,getSongList} from 'api/recommend'
 import {ERR_OK} from 'api/config'
+import {mapMutations} from 'vuex'
+
+
 
 export default {
     data(){
@@ -46,14 +50,23 @@ export default {
         
     },
     methods:{
+        
+        selectItem(item) {
+            this.$router.push({
+                path:`/recommend/${item.dissid}`
+            })
+            this.setDisc(item)
+        },
         _getRecList() {
             getDiscList().then((res) => {
                 if (res.code == ERR_OK) {
                     this.recommend_list = res.data.list
-                    console.log(this.recommend_list)
                 }
             })
-        }
+        },
+        ...mapMutations({
+            setDisc:'SET_DISC',
+        }),
     },
     components:{
         Scroll,
@@ -74,7 +87,7 @@ export default {
         text-align: center;
         line-height: 40px;
     }
-    li{
+    .rec_Li{
         box-sizing: border-box;
         padding:0 20px 20px 20px;
         overflow: hidden;
