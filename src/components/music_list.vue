@@ -4,13 +4,15 @@
             <div class="back" @click="back">
                 <i class="el-icon-arrow-left"></i>
             </div>
-            <h4>{{msg.dissname}}</h4>
+            <h4>{{name}}</h4>
         </div>
         <div class="bgImg" :style="bgImg">
         </div>
         <div class="list">
             <ul>
-                
+                <li v-for="(item,index) in songList" :key="index">
+                    {{item.musicData.songname}}
+                </li>
             </ul>
         </div>
     </div>
@@ -23,14 +25,22 @@ export default {
         }
     },
     props:{
-        msg:{
-            type:Object,
-            default:{}
+        avatar:{
+            type:String,
+            default:''
+        },
+        songList:{
+            type:Array,
+            default:null
+        },
+        name:{
+            type:String,
+            default:'',
         }
     },
     computed:{
         bgImg() {
-            return `background-image:url(${this.msg.imgurl})`
+            return `background-image:url(${this.avatar})`
         }
     },
     methods:{
@@ -51,7 +61,7 @@ export default {
         background:#4a4a4a;
     }
     .bgImg{
-        height:240px;
+        height:260px;
         background-size: 100%;
     }
     .back{
@@ -73,5 +83,10 @@ export default {
         text-align: center;
         color: white;
         line-height: 40px;
+    }
+    .list li{
+        color:#c2c2c2;
+        line-height: 50px;
+        padding:0 0 0 40px;
     }
 </style>

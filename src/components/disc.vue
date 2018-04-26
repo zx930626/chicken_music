@@ -1,6 +1,6 @@
 <template>
     <transition name="slide">
-        <music-list :msg="disc"></music-list>
+        <music-list :avatar="disc.imgurl" :name="disc.creator.name" :songLIst="list"></music-list>
     </transition>
 </template>
 <script>
@@ -32,7 +32,7 @@ export default {
             console.log(this.disc)
             getSongList(this.disc.dissid).then((res) => {
                 if (res.code == ERR_OK) {
-                    console.log(res)
+                    this.list = []
                 }
             })
         }

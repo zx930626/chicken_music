@@ -1,6 +1,6 @@
 <template>
     <transition name="slide">
-        <music-list :msg="songObj"></music-list>
+        <music-list :avatar="singer.avatar" :name="singer.name" :songList="list"></music-list>
     </transition>
 </template>
 <script>
@@ -12,7 +12,8 @@ import {ERR_OK} from 'api/config'
 export default {
     data() {
         return {
-            songObj:{}
+            songObj:{},
+            list:[]
         }
     },
     computed:{
@@ -27,8 +28,8 @@ export default {
         _getSongList() {
             getSingerDetail(this.singer.id).then(res => {
                 if (res.code == ERR_OK) {
-                    this.singer.list = res.data.list
-                    console.log(this.singer)
+                    this.list = res.data.list
+                    console.log(this.list)
                 }
             })
         }
