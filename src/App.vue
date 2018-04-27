@@ -41,4 +41,14 @@
         width: 100%;
         height:100%;
     }
+    li{
+        list-style: none;
+    }
+    span{
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        word-wrap:break-word;
+        word-break: break-all;
+        overflow: hidden;
+    }
 </style>

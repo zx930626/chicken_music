@@ -29,10 +29,9 @@ export default {
             getSingerDetail(this.singer.id).then(res => {
                 if (res.code == ERR_OK) {
                     this.list = res.data.list
-                    console.log(this.list)
                 }
             })
-        }
+        },
     },
     components:{
         MusicList

@@ -65,7 +65,6 @@ export default {
     },
     mounted() {
         
-        
     },
     computed:{
         topListText() {
@@ -215,9 +214,9 @@ export default {
         height:calc(100% - 77px);
         overflow: scroll;
     }
-    /* .singer::-webkit-scrollbar {
+    .singer::-webkit-scrollbar {
         display: none;
-    } */
+    }
     .list_view{
         height:100%;
         position: relative;
@@ -270,5 +269,6 @@ export default {
         font-size: 13px;
         line-height: 28px;
         padding-left: 30px;
+        box-sizing: border-box;
     }
 </style>
